@@ -19,6 +19,11 @@ import lombok.Setter;
 @Entity
 public class Cliente {
 	
+	public Cliente() {
+		setStatus(true);
+		setDataCadastro(LocalDateTime.now());
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
