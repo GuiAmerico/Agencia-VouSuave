@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +35,7 @@ public class ComprasCliente {
 	@Column(name = "data_compra")
 	private LocalDateTime dataCompra;
 	
-	@Column(name = "id_cliente")
+	@JoinColumn(name = "id_cliente")
+	@ManyToOne
 	private Cliente cliente;
 }
