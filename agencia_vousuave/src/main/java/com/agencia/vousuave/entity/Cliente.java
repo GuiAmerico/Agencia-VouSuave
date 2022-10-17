@@ -30,20 +30,20 @@ public class Cliente {
 	private Integer id;
 	
 	@NotEmpty(message = "Campo Nome é obrigatório")
-	@Column
+	@Column(length = 110)
 	private String nome;
 	
 	@NotEmpty(message = "Campo Email é obrigatório")
-	@Column
+	@Column(length = 110)
 	private String email;
 	
 	@NotEmpty(message = "Campo CPF é obrigatório")
-	@Column
+	@Column(length = 11)
 	@CPF(message = "CPF Inválido")
 	private String cpf;
 	
 	@NotEmpty(message = "Campo celular é obrigatório")
-	@Column
+	@Column(length = 11)
 	private String celular;
 	
 	@Column(name = "Data_Cadastro")
