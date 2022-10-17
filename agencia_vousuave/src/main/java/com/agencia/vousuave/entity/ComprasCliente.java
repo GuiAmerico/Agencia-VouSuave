@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +30,11 @@ public class ComprasCliente {
 	
 	
 	@JoinColumn(name = "id_passagem")
-	@ManyToMany
+	@OneToOne
 	private Passagem passagem;
 
 	@JoinColumn(name = "id_pacote")
-	@OneToMany
+	@OneToOne
 	private Pacote pacote;
 	
 	@Column(name = "data_compra")
