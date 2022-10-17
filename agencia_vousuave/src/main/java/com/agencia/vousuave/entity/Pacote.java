@@ -1,5 +1,6 @@
 package com.agencia.vousuave.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,9 +22,8 @@ public class Pacote {
 	private Integer id;
 	
 	@NotEmpty(message = "Campo Destino é obrigatório")
-	@Column(length = 40)
-	@OneToOne
-	@JoinColumn
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "destino",referencedColumnName = "destino")
 	private Passagem destino;
 	
 	@NotEmpty(message = "Campo Preço é obrigatório")
