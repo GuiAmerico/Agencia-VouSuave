@@ -34,7 +34,7 @@ public class Passagem {
 	@Column(name = "caminho")
 	private String caminhoImagem;
 	
-	@Column(name = "id_tipo")
+	@Column(name = "id_tp")
 	@NotEmpty(message = "Campo Tipo de Passagem é obrigatório")
 	private TiposPassagem tiposPassagem;
 }
