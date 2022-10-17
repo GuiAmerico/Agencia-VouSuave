@@ -8,7 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,10 +28,13 @@ public class ComprasCliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "id_passagem")
+	
+	@JoinColumn(name = "id_passagem")
+	@ManyToMany
 	private Passagem passagem;
 
-	@Column(name = "id_pacote")
+	@JoinColumn(name = "id_pacote")
+	@OneToMany
 	private Pacote pacote;
 	
 	@Column(name = "data_compra")
