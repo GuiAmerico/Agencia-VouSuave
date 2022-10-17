@@ -48,12 +48,16 @@ public class Cliente {
 	@Column(length = 11)
 	private String celular;
 	
-	@Column(name = "Data_Cadastro")
-	private LocalDateTime dataCadastro;
-	
 	@NotEmpty(message = "Campo Data de nascimento obrigatório")
 	@Column(name = "Data_Nascimento")
 	private LocalDateTime dataNascimento;
+	
+	@NotEmpty(message = "Campo Senha obrigatório")
+	@Column(length = 20)
+	private String senha;
+	
+	@Column(name = "Data_Cadastro")
+	private LocalDateTime dataCadastro;
 	
 	@Column
 	private boolean status;
