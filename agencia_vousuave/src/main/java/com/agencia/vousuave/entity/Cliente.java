@@ -1,6 +1,7 @@
 package com.agencia.vousuave.entity;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -51,7 +52,7 @@ public class Cliente {
 	
 	@NotNull(message = "Campo Data de nascimento obrigatório")
 	@Column(name = "Data_Nascimento")
-	private LocalDateTime dataNascimento;
+	private Date dataNascimento;
 	
 	@NotEmpty(message = "Campo Senha obrigatório")
 	@Column(length = 20)
