@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -48,7 +49,7 @@ public class Cliente {
 	@Column(length = 11)
 	private String celular;
 	
-	@NotEmpty(message = "Campo Data de nascimento obrigatório")
+	@NotNull(message = "Campo Data de nascimento obrigatório")
 	@Column(name = "Data_Nascimento")
 	private LocalDateTime dataNascimento;
 	
