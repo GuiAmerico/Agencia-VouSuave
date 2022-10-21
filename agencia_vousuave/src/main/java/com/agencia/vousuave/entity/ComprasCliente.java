@@ -2,8 +2,10 @@ package com.agencia.vousuave.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,15 +16,17 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "Compras_Cliente")
 public class ComprasCliente {
 	
 	public ComprasCliente() {
-		setDataCompra(LocalDateTime.now());
+		this.setDataCompra(LocalDateTime.now());
 	}
 	
 	@Id
@@ -31,11 +35,11 @@ public class ComprasCliente {
 	
 	
 	@JoinColumn(name = "id_passagem")
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Passagem passagem;
 
 	@JoinColumn(name = "id_pacote")
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Pacote pacote;
 	
 	@Column(name = "data_compra")

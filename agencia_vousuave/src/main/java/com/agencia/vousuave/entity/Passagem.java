@@ -14,11 +14,16 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Passagem {
+
+	public Passagem() {
+
+	}
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@NotEmpty(message = "Campo Origem é obrigatório")
 	@Column(length = 110)
 	private String origem;
@@ -26,19 +31,19 @@ public class Passagem {
 	@NotEmpty(message = "Campo Destino é obrigatório")
 	@Column(length = 110)
 	private String destino;
-	
+
 	@NotEmpty(message = "Campo Preço é obrigatório")
 	@Column
 	private double preco;
-	
+
 	@NotEmpty(message = "Campo Desconto é obrigatório")
 	@Column
 	private double desconto;
-	
+
 	@NotEmpty(message = "Campo Caminho da Imagem é obrigatório")
 	@Column(name = "caminho")
 	private String caminhoImagem;
-	
+
 	@Column(name = "id_tp")
 	@NotEmpty(message = "Campo Tipo de Passagem é obrigatório")
 	private TiposPassagem tiposPassagem;
