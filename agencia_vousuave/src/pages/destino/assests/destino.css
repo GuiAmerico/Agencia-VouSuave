@@ -1,0 +1,16 @@
+#bg-destino{
+    background-image: url(bg-mundo.jpg); background-repeat: no-repeat;
+    height: 400px;
+
+}
+
+#arrow-top{
+    position: fixed;
+    top: 90%;
+    left: 95%;
+    z-index: 2;
+}
+
+.shadow-blue:hover{
+    box-shadow: 0 0 1em blue;
+}
