@@ -1,4 +1,4 @@
-package com.agencia.vousuave.entity;
+package com.agencia.vousuave.enums;
 
 public enum TiposPassagem {
 	

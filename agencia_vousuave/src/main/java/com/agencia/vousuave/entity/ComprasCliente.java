@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,28 +27,25 @@ import lombok.ToString;
 @Entity
 @Table(name = "Compras_Cliente")
 public class ComprasCliente {
-	
+
 	public ComprasCliente() {
 		this.setDataCompra(LocalDateTime.now());
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	
-	@JoinColumn(name = "id_passagem")
-	@OneToOne(fetch = FetchType.LAZY)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private Passagem passagem;
 
-	@JoinColumn(name = "id_pacote")
 	@OneToOne(cascade = CascadeType.ALL)
 	private Pacote pacote;
-	
+
 	@Column(name = "data_compra")
 	private LocalDateTime dataCompra;
-	
-	@JoinColumn(name = "id_cliente")
-	@ManyToOne
-	private Cliente cliente;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Usuario cliente;
 }
