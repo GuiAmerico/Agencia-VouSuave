@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,45 +15,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.agencia.vousuave.entity.Cliente;
-import com.agencia.vousuave.repository.ClienteRepository;
+import com.agencia.vousuave.entity.Usuario;
+import com.agencia.vousuave.service.UsuarioService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/clientes")
-public class ClienteController {
+@RequiredArgsConstructor
+public class UsuarioController {
 	
-	@Autowired
-	private ClienteRepository repository;
+	private final UsuarioService service;
 	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Cliente> getAllClientes () {
-		return repository.findAll();
+	public List<Usuario> getAllClientes () {
+		return service.findAll();
 		
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente save(@RequestBody @Valid Cliente cliente) throws ParseException {
-		return repository.save(cliente);
+	public Usuario save(@RequestBody @Valid Usuario cliente) throws ParseException {
+		return service.save(cliente);
 	}
 	
 	@PutMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)	
-	public Cliente update( @PathVariable Integer id,@RequestBody @Valid Cliente cliente){
-		return repository.findById(id).map(c -> {
-			cliente.setId(c.getId());
-			repository.save(cliente);
-			return c;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
-	
+	@ResponseStatus(HttpStatus.OK)	
+	public Usuario update( @PathVariable Integer id,@RequestBody @Valid Usuario cliente){
+		return service.update(cliente, id);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)	
 	public void delete(@PathVariable Integer id){
-		repository.deleteById(id);
+		service.deleteById(id);
 	}
 }
