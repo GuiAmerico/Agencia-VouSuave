@@ -1,0 +1,11 @@
+#bg-promocoes{
+    background-image: url(bg-promocoes.jpg);
+    height: 400px;
+}
+
+#arrow-top{
+    position: fixed;
+    top: 90%;
+    left: 95%;
+    z-index: 2;
+}
