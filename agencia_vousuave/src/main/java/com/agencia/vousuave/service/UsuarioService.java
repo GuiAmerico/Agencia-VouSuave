@@ -21,7 +21,9 @@ public class UsuarioService {
 	}
 	
 	public Usuario update(Usuario cliente, Integer id) {
-		existsById(id);
+		if(!repository.findById(id).isPresent()) {
+			throw new ResourceNotFoundException("Usuario não encontrado");
+		}
 		cliente.setId(id);
 		return save(cliente);
 		
@@ -32,12 +34,9 @@ public class UsuarioService {
 	}
 	
 	public void deleteById(Integer id) {
-		existsById(id);
-		repository.deleteById(id);
+		Usuario usuario = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
+		usuario.setStatus(false);
 	}
 	
-	private void existsById(Integer id) {
-		repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
-	}
 	
 }

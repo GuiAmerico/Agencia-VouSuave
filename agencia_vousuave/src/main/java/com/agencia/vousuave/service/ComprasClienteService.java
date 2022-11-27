@@ -30,8 +30,10 @@ public class ComprasClienteService {
 	}
 	
 	
-	public List<ComprasCliente> findAll(){
-		return repository.findAll();
+	public List<ComprasCliente> findAll(Integer id){
+		Usuario cliente = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+		
+		return cliente.getCompras();
 	}
 	
 	public void deleteById(Integer id) {

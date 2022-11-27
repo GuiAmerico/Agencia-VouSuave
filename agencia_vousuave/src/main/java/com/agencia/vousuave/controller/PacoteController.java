@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,29 +31,27 @@ public class PacoteController {
 	
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<Pacote> getAllPacotes() {
-		return service.findAll();
+	public ResponseEntity<List<Pacote>> getAllPacotes() {
+		return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
 
 	}
 
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Pacote save(@RequestBody @Valid Pacote pacote) throws ParseException {
+	public ResponseEntity<Pacote> save(@RequestBody @Valid Pacote pacote) throws ParseException {
 		
-		return service.save(pacote);
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(pacote));
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)	
-	public Pacote update( @PathVariable Integer id,@RequestBody @Valid Pacote pacote){
-		return service.update(pacote, id);
+	public ResponseEntity<Pacote> update( @PathVariable Integer id,@RequestBody @Valid Pacote pacote){
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(pacote, id));
 	
 	}
 	
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)	
-	public void delete(@PathVariable Integer id){
+	public ResponseEntity<String> delete(@PathVariable Integer id){
 		service.deleteById(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pacote deletado com sucesso!");
 	}
 }

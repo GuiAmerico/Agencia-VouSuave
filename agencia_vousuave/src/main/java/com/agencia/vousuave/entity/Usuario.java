@@ -68,7 +68,7 @@ public class Usuario {
 	private Date dataNascimento;
 
 	@NotEmpty(message = "Campo Senha obrigatório")
-	@Column(length = 20, unique = true, nullable = false)
+	@Column(nullable = false)
 	private String senha;
 
 	@Column(name = "Data_Cadastro")

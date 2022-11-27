@@ -5,9 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.agencia.vousuave.entity.Passagem;
 import com.agencia.vousuave.service.PassagemService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/passagens")
+@RequiredArgsConstructor
 public class PassagemController {
 
-	@Autowired
-	private PassagemService service;
+	
+	private final PassagemService service;
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
@@ -36,21 +38,19 @@ public class PassagemController {
 	}
 
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Passagem save(@RequestBody @Valid Passagem passagem) throws ParseException {
-		return service.save(passagem);
+	public ResponseEntity<Passagem> save(@RequestBody @Valid Passagem passagem) throws ParseException {
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(passagem));
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Passagem update(@PathVariable Integer id, @RequestBody @Valid Passagem passagem) {
-		return service.update(passagem, id);
+	public ResponseEntity<Passagem> update(@PathVariable Integer id, @RequestBody @Valid Passagem passagem) {
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(passagem, id));
 
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Integer id) {
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
 		service.deleteById(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Passagem deletada com sucesso!");
 	}
 }
