@@ -2,6 +2,7 @@ package com.agencia.vousuave.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -58,7 +59,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.exceptionHandling().authenticationEntryPoint(unauthoriezedHandler).and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests()
-		.anyRequest().permitAll();
+		.antMatchers(HttpMethod.GET,"http://localhost:8080/api/passagens/**").authenticated()
+		.antMatchers(HttpMethod.GET,"http://localhost:8080/api/pacotes/**").authenticated()
+		.antMatchers("http://localhost:8080/api/compras/**").hasRole("USER")
+		.antMatchers("http://localhost:8080/api/usuarios/**").authenticated()
+		.antMatchers("http://localhost:8080/api/auth/**").permitAll()
+		.anyRequest().authenticated();
 		
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
