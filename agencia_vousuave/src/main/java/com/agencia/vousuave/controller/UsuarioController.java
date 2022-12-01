@@ -22,7 +22,7 @@ import com.agencia.vousuave.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
 	
