@@ -1,11 +1,13 @@
 package com.agencia.vousuave.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.agencia.vousuave.dto.EmailDTO;
+import com.agencia.vousuave.dto.UsuarioDTO;
 import com.agencia.vousuave.entity.Email;
 import com.agencia.vousuave.entity.Usuario;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
@@ -20,9 +22,15 @@ public class UsuarioService {
 	private final UsuarioRepository repository;
 	private final EmailService emailService;
 
-	public Usuario save(Usuario cliente) {
-		sendEmail(cliente);
-		return repository.save(cliente);
+	public Usuario save(UsuarioDTO usuarioDTO) {
+
+		Usuario usuario = new Usuario();
+		BeanUtils.copyProperties(usuarioDTO, usuario);
+
+		usuario.setDataCadastro(LocalDateTime.now());
+		usuario.setStatus(true);
+		sendEmail(usuario);
+		return repository.save(usuario);
 	}
 
 	private void sendEmail(Usuario usuario) {
@@ -34,20 +42,20 @@ public class UsuarioService {
 		String text = String.format("O grande segredo de uma vida boa é descobrir qual é o seu destino. "
 				+ "E realizá-lo. Que você possa encontrar o seu aqui. Seja bem-vindo %s! ", usuario.getNome());
 		emailDTO.setText(text);
-		
+
 		Email email = new Email();
 		BeanUtils.copyProperties(emailDTO, email);
-		
+
 		emailService.sendEmail(email);
-		
+
 	}
 
-	public Usuario update(Usuario cliente, Integer id) {
+	public Usuario update(UsuarioDTO usuarioDTO, Integer id) {
 		if (!repository.findById(id).isPresent()) {
 			throw new ResourceNotFoundException("Usuario não encontrado");
 		}
-		cliente.setId(id);
-		return save(cliente);
+		usuarioDTO.setId(id);
+		return save(usuarioDTO);
 
 	}
 

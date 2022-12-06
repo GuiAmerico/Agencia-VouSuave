@@ -1,11 +1,11 @@
-package com.agencia.vousuave.request;
+package com.agencia.vousuave.dto;
 
 import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
 @Data
-public class LoginRequest {
+public class LoginDTO {
 
 	@NotBlank
 	private String username;
