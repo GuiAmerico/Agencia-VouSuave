@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.agencia.vousuave.dto.EmailDTO;
@@ -39,6 +40,7 @@ public class UsuarioService {
 	private final RoleRepository roleRepository;
 	private final JwtUtils jwtUtils;
 	private final AuthenticationManager authenticationManager;
+	private final PasswordEncoder encoder;
 
 	public UsuarioDTO save(UsuarioDTO usuarioDTO) {
 
@@ -49,8 +51,10 @@ public class UsuarioService {
 		usuario.setStatus(true);
 		addRole(usuarioDTO);
 		sendEmail(usuario);
+		usuario.setSenha(encoder.encode(usuario.getSenha()));
 		repository.save(usuario);
 		BeanUtils.copyProperties(usuario, usuarioDTO);
+		
 
 		return usuarioDTO;
 	}
