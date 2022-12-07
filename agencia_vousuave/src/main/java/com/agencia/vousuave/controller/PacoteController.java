@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.agencia.vousuave.entity.Pacote;
+import com.agencia.vousuave.dto.PacoteDTO;
 import com.agencia.vousuave.service.PacoteService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,21 +31,21 @@ public class PacoteController {
 	
 
 	@GetMapping
-	public ResponseEntity<List<Pacote>> getAllPacotes() {
+	public ResponseEntity<List<PacoteDTO>> getAllPacotes() {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
 
 	}
 
 	@PostMapping
-	public ResponseEntity<Pacote> save(@RequestBody @Valid Pacote pacote) throws ParseException {
+	public ResponseEntity<PacoteDTO> save(@RequestBody @Valid PacoteDTO pacoteDTO) throws ParseException {
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(pacote));
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(pacoteDTO));
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)	
-	public ResponseEntity<Pacote> update( @PathVariable Integer id,@RequestBody @Valid Pacote pacote){
-		return ResponseEntity.status(HttpStatus.OK).body(service.update(pacote, id));
+	public ResponseEntity<PacoteDTO> update( @PathVariable Integer id,@RequestBody @Valid PacoteDTO pacoteDTO){
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(pacoteDTO, id));
 	
 	}
 	

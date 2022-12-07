@@ -12,16 +12,19 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final UsuarioRepository repository;
 	
+
 	@Override
 	public UserDetails loadUserByUsername(String nome) throws UsernameNotFoundException {
-		
-		Usuario user = repository.findByNome(nome).orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
-		
+
+		Usuario user = repository.findByNome(nome)
+				.orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
+
 		return UserDetailsImpl.build(user);
 	}
 
+	
 }

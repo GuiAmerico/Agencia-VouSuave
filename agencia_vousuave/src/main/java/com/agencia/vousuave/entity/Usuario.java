@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -51,6 +52,7 @@ public class Usuario {
 	private String nome;
 
 	@NotEmpty(message = "Campo Email é obrigatório")
+	@Email
 	@Column(length = 110, nullable = false)
 	private String email;
 

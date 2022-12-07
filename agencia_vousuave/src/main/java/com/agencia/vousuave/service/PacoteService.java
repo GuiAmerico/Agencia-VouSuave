@@ -1,9 +1,12 @@
 package com.agencia.vousuave.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.agencia.vousuave.dto.PacoteDTO;
 import com.agencia.vousuave.entity.Pacote;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
 import com.agencia.vousuave.repository.PacoteRepository;
@@ -16,23 +19,44 @@ public class PacoteService {
 	
 	private final PacoteRepository repository;
 	
-	public Pacote save(Pacote pacote) {
-		return repository.save(pacote);
+	public PacoteDTO save(PacoteDTO pacoteDTO) {
+		Pacote pacote = new Pacote();
+		BeanUtils.copyProperties(pacoteDTO, pacote);
+		
+		repository.save(pacote);
+		BeanUtils.copyProperties(pacote, pacoteDTO);
+				
+		return pacoteDTO;
 	}
 	
-	public Pacote update(Pacote pacote, Integer id) {
+	public PacoteDTO update(PacoteDTO pacoteDTO, Integer id) {
+		Pacote pacote = new Pacote();
 		existsById(id);
-		pacote.setId(id);
-		return save(pacote);
+		pacoteDTO.setId(id);
+		BeanUtils.copyProperties(pacoteDTO, pacote);
+		
+		repository.save(pacote);
+		return pacoteDTO;
 		
 	}
 	
-	public List<Pacote> findAll(){
-		return repository.findAll();
+	public List<PacoteDTO> findAll(){
+		
+		List<PacoteDTO> pacotes = new ArrayList<>();
+		for(Pacote pacote : repository.findAll()) {
+			PacoteDTO pacoteDTO = new PacoteDTO();
+			BeanUtils.copyProperties(pacote, pacoteDTO);
+			pacotes.add(pacoteDTO);
+		}
+		return pacotes;
+				
 	}
 	
-	public Pacote findById(Integer id){
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pacote não encontrado"));
+	public PacoteDTO findById(Integer id){
+		PacoteDTO pacoteDTO = new PacoteDTO();
+		Pacote pacote = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pacote não encontrado"));
+		BeanUtils.copyProperties(pacote, pacoteDTO);
+		return pacoteDTO;
 	}
 	
 	public void deleteById(Integer id) {
