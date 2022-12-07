@@ -1,6 +1,7 @@
 package com.agencia.vousuave.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -22,7 +23,7 @@ public class UsuarioService {
 	private final UsuarioRepository repository;
 	private final EmailService emailService;
 
-	public Usuario save(UsuarioDTO usuarioDTO) {
+	public UsuarioDTO save(UsuarioDTO usuarioDTO) {
 
 		Usuario usuario = new Usuario();
 		BeanUtils.copyProperties(usuarioDTO, usuario);
@@ -30,7 +31,10 @@ public class UsuarioService {
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.setStatus(true);
 		sendEmail(usuario);
-		return repository.save(usuario);
+		repository.save(usuario);
+		BeanUtils.copyProperties(usuario, usuarioDTO);
+
+		return usuarioDTO;
 	}
 
 	private void sendEmail(Usuario usuario) {
@@ -50,17 +54,26 @@ public class UsuarioService {
 
 	}
 
-	public Usuario update(UsuarioDTO usuarioDTO, Integer id) {
+	public UsuarioDTO update(UsuarioDTO usuarioDTO, Integer id) {
 		if (!repository.findById(id).isPresent()) {
 			throw new ResourceNotFoundException("Usuario não encontrado");
 		}
 		usuarioDTO.setId(id);
-		return save(usuarioDTO);
+		BeanUtils.copyProperties(save(usuarioDTO), usuarioDTO);
+
+		return usuarioDTO;
 
 	}
 
-	public List<Usuario> findAll() {
-		return repository.findAll();
+	public List<UsuarioDTO> findAll() {
+		List<UsuarioDTO> usuarios = new ArrayList<>();
+		for(Usuario usuario : repository.findAll()) {
+			UsuarioDTO usuarioDTO = new UsuarioDTO();
+			BeanUtils.copyProperties(usuario, usuarioDTO);
+			usuarios.add(usuarioDTO);
+		}
+		return usuarios;
+		
 	}
 
 	public void deleteById(Integer id) {
