@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.agencia.vousuave.entity.Passagem;
+import com.agencia.vousuave.dto.PassagemDTO;
 import com.agencia.vousuave.service.PassagemService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,20 +30,19 @@ public class PassagemController {
 	private final PassagemService service;
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<Passagem> getAllPassagens() {
+	public List<PassagemDTO> findAll() {
 		return service.findAll();
 
 	}
 
 	@PostMapping
-	public ResponseEntity<Passagem> save(@RequestBody @Valid Passagem passagem) throws ParseException {
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(passagem));
+	public ResponseEntity<PassagemDTO> save(@RequestBody @Valid PassagemDTO passagemDTO) throws ParseException {
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(passagemDTO));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Passagem> update(@PathVariable Integer id, @RequestBody @Valid Passagem passagem) {
-		return ResponseEntity.status(HttpStatus.OK).body(service.update(passagem, id));
+	public ResponseEntity<PassagemDTO> update(@PathVariable Integer id, @RequestBody @Valid PassagemDTO passagemDTO) {
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(passagemDTO, id));
 
 	}
 

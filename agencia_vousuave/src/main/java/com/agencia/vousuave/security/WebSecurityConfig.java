@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("http://localhost:8080/api/compras/**").hasRole("USER")
 		.antMatchers("http://localhost:8080/api/usuarios/**").authenticated()
 		.antMatchers("http://localhost:8080/api/auth/**").permitAll()
-		.anyRequest().authenticated();
+		.anyRequest().permitAll();
 		
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

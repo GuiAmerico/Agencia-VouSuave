@@ -1,9 +1,12 @@
 package com.agencia.vousuave.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.agencia.vousuave.dto.PassagemDTO;
 import com.agencia.vousuave.entity.Passagem;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
 import com.agencia.vousuave.repository.PassagemRepository;
@@ -16,23 +19,42 @@ public class PassagemService {
 	
 	private final PassagemRepository repository;
 	
-	public Passagem save(Passagem passagem) {
-		return repository.save(passagem);
+	public PassagemDTO save(PassagemDTO passagemDTO) {
+		
+		Passagem passagem = new Passagem();
+		BeanUtils.copyProperties(passagemDTO, passagem);
+		repository.save(passagem);
+		BeanUtils.copyProperties(passagem, passagemDTO);
+		return passagemDTO;
 	}
 	
-	public Passagem update(Passagem passagem, Integer id) {
+	public PassagemDTO update(PassagemDTO passagemDTO, Integer id) {
 		existsById(id);
-		passagem.setId(id);
-		return save(passagem);
+		passagemDTO.setId(id);
+		Passagem passagem = new Passagem();
+		BeanUtils.copyProperties(passagemDTO, passagem);
+		repository.save(passagem);
+		BeanUtils.copyProperties(passagem, passagemDTO);
+		return passagemDTO;
 		
 	}
 	
-	public List<Passagem> findAll(){
-		return repository.findAll();
+	public List<PassagemDTO> findAll(){
+		List<PassagemDTO> passagens = new ArrayList<>();
+		for(Passagem passagem : repository.findAll()) {
+			PassagemDTO passagemDTO = new PassagemDTO();
+			BeanUtils.copyProperties(passagem, passagemDTO);
+			passagens.add(passagemDTO);
+			
+		}
+		return passagens;
 	}
 	
-	public Passagem findById(Integer id){
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passagem não encontrada"));
+	public PassagemDTO findById(Integer id){
+		PassagemDTO passagemDTO = new PassagemDTO();
+		Passagem passagem = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passagem não encontrada"));
+		BeanUtils.copyProperties(passagem, passagemDTO);
+		return passagemDTO; 
 	}
 	
 	public void deleteById(Integer id) {
