@@ -22,6 +22,7 @@ import com.agencia.vousuave.entity.Email;
 import com.agencia.vousuave.entity.Role;
 import com.agencia.vousuave.entity.Usuario;
 import com.agencia.vousuave.enums.ERole;
+import com.agencia.vousuave.exception.ResourceAlreadyExistsException;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
 import com.agencia.vousuave.repository.RoleRepository;
 import com.agencia.vousuave.repository.UsuarioRepository;
@@ -43,6 +44,8 @@ public class UsuarioService {
 	private final PasswordEncoder encoder;
 
 	public UsuarioDTO save(UsuarioDTO usuarioDTO) {
+		
+		validarDados(usuarioDTO);
 
 		Usuario usuario = new Usuario();
 		BeanUtils.copyProperties(usuarioDTO, usuario);
@@ -50,13 +53,28 @@ public class UsuarioService {
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.setStatus(true);
 		addRole(usuarioDTO);
-		sendEmail(usuario);
 		usuario.setSenha(encoder.encode(usuario.getSenha()));
 		repository.save(usuario);
+
+		if(usuario.getId() > 0) {
+			sendEmail(usuario);
+		}
+		
 		BeanUtils.copyProperties(usuario, usuarioDTO);
 		
 
 		return usuarioDTO;
+	}
+	
+	private void validarDados(UsuarioDTO usuarioDTO) {
+		if(repository.existsByEmail(usuarioDTO.getEmail())) {
+			throw new ResourceAlreadyExistsException("Email já está sendo utilizado");
+		}
+		
+		if(repository.existsByCelular(usuarioDTO.getCelular())) {
+			throw new ResourceAlreadyExistsException("Celular já está sendo utilizado");
+		}
+
 	}
 
 	private void addRole(UsuarioDTO usuarioDTO) {
@@ -69,21 +87,21 @@ public class UsuarioService {
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 					roles.add(adminRole);
 
 					break;
 
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 					roles.add(userRole);
 				}
 			});
@@ -130,8 +148,10 @@ public class UsuarioService {
 			throw new ResourceNotFoundException("Usuario não encontrado");
 		}
 		usuarioDTO.setId(id);
-		BeanUtils.copyProperties(save(usuarioDTO), usuarioDTO);
-
+		Usuario usuario = new Usuario();
+		BeanUtils.copyProperties(usuarioDTO, usuario);
+		
+		repository.save(usuario);
 		return usuarioDTO;
 
 	}
