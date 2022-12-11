@@ -5,11 +5,27 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.agencia.vousuave.entity.Pacote;
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PacoteDTO {
 
+	public PacoteDTO(Pacote pacote) {
+		this.id = pacote.getId();
+		this.destino = pacote.getDestino();
+		this.preco = pacote.getPreco();
+		this.desconto = pacote.getDesconto();
+		this.diarias = pacote.getDiarias();
+		this.hotel = pacote.getHotel();
+		this.caminhoImagem = pacote.getCaminhoImagem();
+		this.guia = pacote.isGuia();
+		this.internacional = pacote.isInternacional();
+	}
+	
 	private Integer id;
 	@NotNull(message = "Campo Destino é obrigatório")
 	private String destino;
