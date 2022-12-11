@@ -1,9 +1,8 @@
 package com.agencia.vousuave.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.agencia.vousuave.dto.PassagemDTO;
@@ -39,15 +38,12 @@ public class PassagemService {
 		
 	}
 	
-	public List<PassagemDTO> findAll(){
-		List<PassagemDTO> passagens = new ArrayList<>();
-		for(Passagem passagem : repository.findAll()) {
-			PassagemDTO passagemDTO = new PassagemDTO();
-			BeanUtils.copyProperties(passagem, passagemDTO);
-			passagens.add(passagemDTO);
-			
-		}
-		return passagens;
+	public Page<PassagemDTO> findAll(Pageable pageable){
+		Page<Passagem> passagens = repository.findAll(pageable);
+
+		Page<PassagemDTO> passagensDTO = passagens.map(passagem -> new PassagemDTO(passagem));
+
+		return passagensDTO;
 	}
 	
 	public PassagemDTO findById(Integer id){

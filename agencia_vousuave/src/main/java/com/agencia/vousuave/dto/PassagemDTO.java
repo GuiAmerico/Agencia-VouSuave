@@ -5,16 +5,32 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.agencia.vousuave.entity.Passagem;
 import com.agencia.vousuave.enums.TiposPassagem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class PassagemDTO {
 
+	public PassagemDTO(Passagem passagem) {
+		this.id = passagem.getId();
+		this.origem = passagem.getOrigem();
+		this.destino = passagem.getDestino();
+		this.preco = passagem.getPreco();
+		this.desconto = passagem.getDesconto();
+		this.caminhoImagem = passagem.getCaminhoImagem();
+		this.tiposPassagem = passagem.getTiposPassagem();
+		this.disponibilidade = passagem.getDisponibilidade();
+	}
+	
 	private Integer id;
 	@NotEmpty(message = "Campo Origem é obrigatório")
 	private String origem;
