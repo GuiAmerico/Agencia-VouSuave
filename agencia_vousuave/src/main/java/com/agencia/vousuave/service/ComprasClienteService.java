@@ -48,8 +48,8 @@ public class ComprasClienteService {
 	}
 	
 	
-	public List<ComprasClienteDTO> findAll(Integer id){
-		Usuario cliente = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+	public List<ComprasClienteDTO> findAll(Integer usuario_id){
+		Usuario cliente = usuarioRepository.findById(usuario_id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
 		
 		List<ComprasClienteDTO> compras = new ArrayList<>();
 		for(ComprasCliente comprasCliente : cliente.getCompras()) {
