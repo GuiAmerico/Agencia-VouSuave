@@ -52,7 +52,8 @@ public class UsuarioService {
 
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.setStatus(true);
-		addRole(usuarioDTO);
+		addRole(usuarioDTO, usuario);
+		
 		usuario.setSenha(encoder.encode(usuario.getSenha()));
 		repository.save(usuario);
 
@@ -77,9 +78,8 @@ public class UsuarioService {
 
 	}
 
-	private void addRole(UsuarioDTO usuarioDTO) {
+	private Set<Role> addRole(UsuarioDTO usuarioDTO, Usuario usuario) {
 
-		Usuario usuario = new Usuario();
 		BeanUtils.copyProperties(usuarioDTO, usuario);
 
 		Set<String> strRoles = usuarioDTO.getRoles();
@@ -108,6 +108,8 @@ public class UsuarioService {
 		}
 
 		usuario.setRoles(roles);
+		System.out.println(usuario.getRoles());
+		return roles;
 	}
 
 	public JwtResponse authLogin(LoginDTO loginDTO) {
