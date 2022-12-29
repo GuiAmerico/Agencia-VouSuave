@@ -80,8 +80,6 @@ public class UsuarioService {
 
 	private Set<Role> addRole(UsuarioDTO usuarioDTO, Usuario usuario) {
 
-		BeanUtils.copyProperties(usuarioDTO, usuario);
-
 		Set<String> strRoles = usuarioDTO.getRoles();
 		Set<Role> roles = new HashSet<>();
 
@@ -108,7 +106,6 @@ public class UsuarioService {
 		}
 
 		usuario.setRoles(roles);
-		System.out.println(usuario.getRoles());
 		return roles;
 	}
 
