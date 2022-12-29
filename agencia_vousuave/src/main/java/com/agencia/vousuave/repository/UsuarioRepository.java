@@ -8,6 +8,7 @@ import com.agencia.vousuave.entity.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	Optional<Usuario> findByNome(String nome);
+	Optional<Usuario> findByEmail(String email);
 	Boolean existsByNome(String nome);
 	Boolean existsByEmail(String email);
 	Boolean existsByCelular(String celular);
