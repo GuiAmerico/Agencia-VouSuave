@@ -47,7 +47,7 @@ public class ComprasClienteController {
 
 	}
 
-	@Operation(summary = "Adds a new Compra", description = "Adds a new Compra", tags = { "ComprasCliente",
+	@Operation(summary = "Adds a new Compra", description = "Adds a new Compra, reference to Usuario from usuario_id ", tags = { "ComprasCliente",
 			"Usuario" }, responses = { @ApiResponse(responseCode = "200", content = {
 					@Content(schema = @Schema(implementation = ComprasClienteDTO.class)) }, description = "Success"),
 					@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
