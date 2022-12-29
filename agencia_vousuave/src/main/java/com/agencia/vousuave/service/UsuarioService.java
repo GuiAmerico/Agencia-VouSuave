@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.agencia.vousuave.dto.EmailDTO;
@@ -21,6 +22,7 @@ import com.agencia.vousuave.entity.Email;
 import com.agencia.vousuave.entity.Role;
 import com.agencia.vousuave.entity.Usuario;
 import com.agencia.vousuave.enums.ERole;
+import com.agencia.vousuave.exception.ResourceAlreadyExistsException;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
 import com.agencia.vousuave.repository.RoleRepository;
 import com.agencia.vousuave.repository.UsuarioRepository;
@@ -39,53 +41,72 @@ public class UsuarioService {
 	private final RoleRepository roleRepository;
 	private final JwtUtils jwtUtils;
 	private final AuthenticationManager authenticationManager;
+	private final PasswordEncoder encoder;
 
 	public UsuarioDTO save(UsuarioDTO usuarioDTO) {
+		
+		validarDados(usuarioDTO);
 
 		Usuario usuario = new Usuario();
 		BeanUtils.copyProperties(usuarioDTO, usuario);
 
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.setStatus(true);
-		addRole(usuarioDTO);
-		sendEmail(usuario);
+		addRole(usuarioDTO, usuario);
+		
+		usuario.setSenha(encoder.encode(usuario.getSenha()));
 		repository.save(usuario);
+
+		if(usuario.getId() > 0) {
+			sendEmail(usuario);
+		}
+		
 		BeanUtils.copyProperties(usuario, usuarioDTO);
+		
 
 		return usuarioDTO;
 	}
+	
+	private void validarDados(UsuarioDTO usuarioDTO) {
+		if(repository.existsByEmail(usuarioDTO.getEmail())) {
+			throw new ResourceAlreadyExistsException("Email já está sendo utilizado");
+		}
+		
+		if(repository.existsByCelular(usuarioDTO.getCelular())) {
+			throw new ResourceAlreadyExistsException("Celular já está sendo utilizado");
+		}
 
-	private void addRole(UsuarioDTO usuarioDTO) {
+	}
 
-		Usuario usuario = new Usuario();
-		BeanUtils.copyProperties(usuarioDTO, usuario);
+	private Set<Role> addRole(UsuarioDTO usuarioDTO, Usuario usuario) {
 
 		Set<String> strRoles = usuarioDTO.getRoles();
 		Set<Role> roles = new HashSet<>();
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 					roles.add(adminRole);
 
 					break;
 
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
 					roles.add(userRole);
 				}
 			});
 		}
 
 		usuario.setRoles(roles);
+		return roles;
 	}
 
 	public JwtResponse authLogin(LoginDTO loginDTO) {
@@ -126,8 +147,10 @@ public class UsuarioService {
 			throw new ResourceNotFoundException("Usuario não encontrado");
 		}
 		usuarioDTO.setId(id);
-		BeanUtils.copyProperties(save(usuarioDTO), usuarioDTO);
-
+		Usuario usuario = new Usuario();
+		BeanUtils.copyProperties(usuarioDTO, usuario);
+		
+		repository.save(usuario);
 		return usuarioDTO;
 
 	}
