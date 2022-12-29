@@ -170,6 +170,7 @@ public class UsuarioService {
 		Usuario usuario = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
 		usuario.setStatus(false);
+		repository.save(usuario);
 	}
 
 }
