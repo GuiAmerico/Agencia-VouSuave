@@ -41,7 +41,7 @@ public class ComprasClienteController {
 					@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
 					@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@GetMapping("/{id}")
-	public ResponseEntity<List<ComprasClienteDTO>> findAllCompras(@PathVariable(name = "id") Integer usuario_id) {
+	public ResponseEntity<List<ComprasClienteDTO>> findAll(@PathVariable(name = "id") Integer usuario_id) {
 
 		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(usuario_id));
 

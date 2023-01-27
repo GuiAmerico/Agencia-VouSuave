@@ -5,14 +5,18 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.agencia.vousuave.entity.Pacote;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PacoteDTO {
+public class PacoteDTO extends RepresentationModel<PacoteDTO>{
 
 	public PacoteDTO(Pacote pacote) {
 		this.id = pacote.getId();

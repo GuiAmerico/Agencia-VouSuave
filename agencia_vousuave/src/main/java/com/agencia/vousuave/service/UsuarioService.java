@@ -1,5 +1,8 @@
 package com.agencia.vousuave.service;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.agencia.vousuave.controller.UsuarioController;
 import com.agencia.vousuave.dto.EmailDTO;
 import com.agencia.vousuave.dto.LoginDTO;
 import com.agencia.vousuave.dto.UsuarioDTO;
@@ -44,7 +48,7 @@ public class UsuarioService {
 	private final PasswordEncoder encoder;
 
 	public UsuarioDTO save(UsuarioDTO usuarioDTO) {
-		
+
 		validarDados(usuarioDTO);
 
 		Usuario usuario = new Usuario();
@@ -53,26 +57,27 @@ public class UsuarioService {
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.setStatus(true);
 		addRole(usuarioDTO, usuario);
-		
+
 		usuario.setSenha(encoder.encode(usuario.getSenha()));
 		repository.save(usuario);
 
-		if(usuario.getId() > 0) {
+		if (usuario.getId() > 0) {
 			sendEmail(usuario);
 		}
-		
+
 		BeanUtils.copyProperties(usuario, usuarioDTO);
-		
+
+		usuarioDTO.add(linkTo(methodOn(UsuarioController.class).findById(usuarioDTO.getId())).withSelfRel());
 
 		return usuarioDTO;
 	}
-	
+
 	private void validarDados(UsuarioDTO usuarioDTO) {
-		if(repository.existsByEmail(usuarioDTO.getEmail())) {
+		if (repository.existsByEmail(usuarioDTO.getEmail())) {
 			throw new ResourceAlreadyExistsException("Email já está sendo utilizado");
 		}
-		
-		if(repository.existsByCelular(usuarioDTO.getCelular())) {
+
+		if (repository.existsByCelular(usuarioDTO.getCelular())) {
 			throw new ResourceAlreadyExistsException("Celular já está sendo utilizado");
 		}
 
@@ -149,7 +154,8 @@ public class UsuarioService {
 		usuarioDTO.setId(id);
 		Usuario usuario = new Usuario();
 		BeanUtils.copyProperties(usuarioDTO, usuario);
-		
+		usuarioDTO.add(linkTo(methodOn(UsuarioController.class).findById(id)).withSelfRel());
+
 		repository.save(usuario);
 		return usuarioDTO;
 
@@ -162,6 +168,10 @@ public class UsuarioService {
 			BeanUtils.copyProperties(usuario, usuarioDTO);
 			usuarios.add(usuarioDTO);
 		}
+		for (UsuarioDTO usuarioDTO : usuarios) {
+			usuarioDTO.add(linkTo(methodOn(UsuarioController.class).findById(usuarioDTO.getId())).withSelfRel());
+
+		}
 		return usuarios;
 
 	}
@@ -171,6 +181,16 @@ public class UsuarioService {
 				.orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
 		usuario.setStatus(false);
 		repository.save(usuario);
+	}
+
+	public UsuarioDTO findById(Integer id) {
+		Usuario usuario = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		BeanUtils.copyProperties(usuario, usuarioDTO);
+		usuarioDTO.add(linkTo(methodOn(UsuarioController.class).findById(id)).withSelfRel());
+
+		return usuarioDTO;
 	}
 
 }

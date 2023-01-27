@@ -4,9 +4,10 @@ import java.text.ParseException;
 
 import javax.validation.Valid;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agencia.vousuave.dto.PacoteDTO;
+import com.agencia.vousuave.dto.PassagemDTO;
 import com.agencia.vousuave.service.PacoteService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,9 +47,22 @@ public class PacoteController {
 					@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
 					@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@GetMapping
-	public ResponseEntity<Page<PacoteDTO>> getAllPacotes(@PageableDefault(size = 6, page = 0) Pageable pageable) {
+	public ResponseEntity<PagedModel<EntityModel<PacoteDTO>>> findAll(@PageableDefault(size = 6, page = 0) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageable));
 
+	}
+
+	@Operation(summary = "Finds a Pacote", description = "Finds Pacote by Id", tags = { "Pacote" }, responses = {
+			@ApiResponse(responseCode = "200", content = {
+					@Content(schema = @Schema(implementation = PassagemDTO.class)) }, description = "Success"),
+			@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
+			@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
+			@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
+	@GetMapping("/{id}")
+	public ResponseEntity<PacoteDTO> findById(@PathVariable Integer id) {
+		
+		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
 	@Operation(summary = "Adds a new Pacote", description = "Adds a new Pacote", tags = { "Pacote" }, responses = {
@@ -88,4 +103,6 @@ public class PacoteController {
 		service.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pacote deletado com sucesso!");
 	}
+
+	
 }
