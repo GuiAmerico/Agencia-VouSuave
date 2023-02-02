@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agencia.vousuave.dto.PassagemDTO;
 import com.agencia.vousuave.dto.UsuarioDTO;
 import com.agencia.vousuave.service.UsuarioService;
 
@@ -35,6 +36,7 @@ public class UsuarioController {
 
 	private final UsuarioService service;
 
+
 	@Operation(summary = "Finds all Usuario", description = "Finds all Usuario", tags = { "Usuario" }, responses = {
 			@ApiResponse(responseCode = "200", content = {
 					@Content(array = @ArraySchema(schema = @Schema(implementation = UsuarioDTO.class))) }, description = "Success"),
@@ -43,9 +45,22 @@ public class UsuarioController {
 			@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
 			@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@GetMapping
-	public ResponseEntity<List<UsuarioDTO>> getAllClientes() {
+	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
 
+	}
+
+	@Operation(summary = "Finds a Usuario", description = "Finds a Usuario by Id", tags = { "Usuario" }, responses = {
+			@ApiResponse(responseCode = "200", content = {
+					@Content(schema = @Schema(implementation = PassagemDTO.class)) }, description = "Success"),
+			@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
+			@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
+			@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
+	@GetMapping("/{id}")
+	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
+
+		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
 	@Operation(summary = "Adds a new Usuario", description = "Adds a new Usuario", tags = { "Usuario" }, responses = {

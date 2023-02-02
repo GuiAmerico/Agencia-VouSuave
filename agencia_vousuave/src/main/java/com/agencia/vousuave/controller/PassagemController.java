@@ -4,9 +4,10 @@ import java.text.ParseException;
 
 import javax.validation.Valid;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +30,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @Tag(name = "Passagem", description = "Endpoints for managing passagens")
 @RestController
@@ -43,12 +43,24 @@ public class PassagemController {
 					@Content(array = @ArraySchema(schema = @Schema(implementation = PassagemDTO.class))) }, description = "Success"),
 					@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
 					@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
-					@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
 					@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@GetMapping
-	public Page<PassagemDTO> findAll(@PageableDefault(size = 3, page = 0) Pageable pageable) {
-		return service.findAll(pageable);
+	public ResponseEntity<PagedModel<EntityModel<PassagemDTO>>> findAll(@PageableDefault(size = 3, page = 0) Pageable pageable) {
+		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageable));
 
+	}
+
+	@Operation(summary = "Finds a Passagem", description = "Finds Passagem by Id", tags = { "Passagem" }, responses = {
+			@ApiResponse(responseCode = "200", content = {
+					@Content(schema = @Schema(implementation = PassagemDTO.class)) }, description = "Success"),
+			@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
+			@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
+			@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
+	@GetMapping("/{id}")
+	public ResponseEntity<PassagemDTO> findById(@PathVariable Integer id) {
+		
+		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
 	@Operation(summary = "Adds a new Passagem", description = "Adds a new Passagem", tags = {
@@ -76,12 +88,13 @@ public class PassagemController {
 
 	}
 
-	@Operation(summary = "Deletes a Passagem", description = "Deleted passagem by Id", tags = { "Passagem" }, responses = {
-			@ApiResponse(responseCode = "204", content = @Content, description = "No Content"),
-			@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
-			@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
-			@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
-			@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
+	@Operation(summary = "Deletes a Passagem", description = "Deleted Passagem by Id", tags = {
+			"Passagem" }, responses = {
+					@ApiResponse(responseCode = "204", content = @Content, description = "No Content"),
+					@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
+					@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
+					@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
+					@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable Integer id) {
 		service.deleteById(id);

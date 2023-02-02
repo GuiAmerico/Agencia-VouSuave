@@ -5,6 +5,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.agencia.vousuave.entity.Passagem;
 import com.agencia.vousuave.enums.TiposPassagem;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,13 +14,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class PassagemDTO {
+public class PassagemDTO extends RepresentationModel<PassagemDTO>{
 
 	public PassagemDTO(Passagem passagem) {
 		this.id = passagem.getId();
