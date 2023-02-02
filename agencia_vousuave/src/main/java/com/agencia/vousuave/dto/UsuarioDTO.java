@@ -10,15 +10,18 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @JsonInclude(Include.NON_NULL) 
-public class UsuarioDTO {
+public class UsuarioDTO extends RepresentationModel<UsuarioDTO>{
 
 	private Integer id;
 	@NotEmpty(message = "Campo Nome é obrigatório")
