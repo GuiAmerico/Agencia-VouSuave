@@ -26,56 +26,50 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-	
-	final UserDetailsServiceImpl userDetailsService;
-	
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	private final UserDetailsServiceImpl userDetailsService;
+
 	private final AuthEntryPointJwt unauthoriezedHandler;
-	
+
 	@Bean
-	public AuthTokenFilter authTokenFilter() {
+	public AuthTokenFilter authTokenFilte() {
 		return new AuthTokenFilter();
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		
+
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
-		.exceptionHandling().authenticationEntryPoint(unauthoriezedHandler).and()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.authorizeRequests()
-		.antMatchers(HttpMethod.GET,"http://localhost:8080/api/passagens/**").authenticated()
-		.antMatchers(HttpMethod.GET,"http://localhost:8080/api/pacotes/**").authenticated()
-		.antMatchers("http://localhost:8080/api/compras/**").hasRole("USER")
-		.antMatchers("http://localhost:8080/api/usuarios/**").authenticated()
-		.antMatchers("http://localhost:8080/api/auth/**").permitAll()
-		.anyRequest().permitAll();
-		
-		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthoriezedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers(HttpMethod.GET, "http://localhost:8080/api/passagens/**").authenticated()
+				.antMatchers(HttpMethod.GET, "http://localhost:8080/api/pacotes/**").authenticated()
+				.antMatchers("http://localhost:8080/api/compras/**").hasRole("USER")
+				.antMatchers("http://localhost:8080/api/usuarios/**").authenticated()
+				.antMatchers("http://localhost:8080/api/auth/**").permitAll().anyRequest().permitAll();
+
+		http.addFilterBefore(authTokenFilte(), UsernamePasswordAuthenticationFilter.class);
 	}
+
 	@Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
-                                   "/configuration/ui",
-                                   "/swagger-resources/**",
-                                   "/configuration/security",
-                                   "/swagger-ui.html",
-                                   "/webjars/**");
-    }
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
+				"/configuration/security", "/swagger-ui.html", "/webjars/**");
+	}
 }

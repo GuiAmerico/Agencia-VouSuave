@@ -3,6 +3,7 @@ package com.agencia.vousuave.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -24,9 +25,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PassagemService {
 
+	private final HateoasPageableHandlerMethodArgumentResolver resolver = new HateoasPageableHandlerMethodArgumentResolver();
 	private final PassagemRepository repository;
+	private final PagedResourcesAssembler<PassagemDTO> assembler = new PagedResourcesAssembler<>(resolver, null);
 
-	private final PagedResourcesAssembler<PassagemDTO> assembler;
 	public PassagemDTO save(PassagemDTO passagemDTO) {
 
 		Passagem passagem = new Passagem();
@@ -52,10 +54,9 @@ public class PassagemService {
 
 	public PagedModel<EntityModel<PassagemDTO>> findAll(Pageable pageable) {
 		Page<Passagem> passagens = repository.findAll(pageable);
-
 		Page<PassagemDTO> passagensDTO = passagens.map(passagem -> new PassagemDTO(passagem));
-		Link link =(linkTo(methodOn(PassagemController.class).findAll(pageable)).withSelfRel());
-		
+		Link link = (linkTo(methodOn(PassagemController.class).findAll(pageable)).withSelfRel());
+
 		return assembler.toModel(passagensDTO, link);
 	}
 
@@ -70,7 +71,7 @@ public class PassagemService {
 
 	public void deleteById(Integer id) {
 		existsById(id);
-		
+
 		repository.deleteById(id);
 	}
 
