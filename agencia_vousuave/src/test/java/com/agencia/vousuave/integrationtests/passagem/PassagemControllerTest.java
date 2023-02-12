@@ -43,7 +43,7 @@ import com.agencia.vousuave.service.impl.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(PassagemController.class)
-public class PassagemIntegrationTest {
+public class PassagemControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -68,7 +68,6 @@ public class PassagemIntegrationTest {
 
 	private static PagedModel<EntityModel<PassagemDTO>> PASSAGENS_PAGE_DTO;
 
-	
 	@BeforeAll
 	public static void setup() {
 		HttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -81,7 +80,7 @@ public class PassagemIntegrationTest {
 	}
 
 	@Test
-	public void savePassagem_WithDataValid_ReturnsCreated() throws Exception {
+	public void savePassagem_WithDataValid_ReturnsPassagemAndStatusCreated() throws Exception {
 		when(service.save(PASSAGEM_DTO)).thenReturn(PASSAGEM_DTO);
 		String content = mapper.writeValueAsString(PASSAGEM_DTO);
 		String uri = "/api/passagens";
@@ -129,7 +128,7 @@ public class PassagemIntegrationTest {
 
 	@Test
 	public void findAllPassagens_ReturnsPagesPassagemAndStatusOk() throws Exception {
-		String jsonData = "{\"_embedded\":{\"passagemDTOList\":[{\"id\":1,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"AVIAO\"},{\"id\":2,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"AVIAO\"},{\"id\":3,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"AVIAO\"}]}, \"_links\":{\"self\":{\"href\":\"http://localhost\"}}, \"page\":{\"size\":3, \"totalElements\":3, \"totalPages\":1,\"number\":0}}";
+		String jsonData = "{\"_embedded\":{\"passagemDTOList\":[{\"id\":1,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"AVIAO\"},{\"id\":2,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"ONIBUS\"},{\"id\":3,\"origem\":\"Origem\",\"destino\":\"Destino\",\"preco\":1000.0,\"desconto\":0.05,\"caminhoImagem\":\"CaminhoImagem\",\"tiposPassagem\":\"CRUZEIRO\"}]}, \"_links\":{\"self\":{\"href\":\"http://localhost\"}}, \"page\":{\"size\":3, \"totalElements\":3, \"totalPages\":1,\"number\":0}}";
 
 		Pageable pageable = PageRequest.of(0, 3);
 		when(service.findAll(pageable)).thenReturn(PASSAGENS_PAGE_DTO);
@@ -141,7 +140,7 @@ public class PassagemIntegrationTest {
 				.andExpect(content().json(jsonData));
 
 	}
-	
+
 	@Test
 	public void deletePassagem_ById_ReturnsNoContent() throws Exception {
 		String uri = "/api/passagens/1";
@@ -149,6 +148,5 @@ public class PassagemIntegrationTest {
 		mockMvc.perform(delete(uri)).andExpect(status().isNoContent());
 
 	}
-
 
 }

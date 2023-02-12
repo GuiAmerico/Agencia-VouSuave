@@ -4,14 +4,10 @@ import static com.agencia.vousuave.mocks.MockPassagem.INVALID_PASSAGEM;
 import static com.agencia.vousuave.mocks.MockPassagem.INVALID_PASSAGEM_DTO;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO;
-import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_1;
-import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_2;
-import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_3;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGENS_PAGES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -54,7 +50,7 @@ class PassagemServiceTest {
 	}
 
 	@Test
-	public void savePassagem_WithDataInvalid_ThrowsException() {
+	public void savePassagem_WithDataInvalid_ThrowsResourceNotValidException() {
 		when(repository.save(INVALID_PASSAGEM)).thenThrow(ResourceNotValidException.class);
 
 		assertThatThrownBy(() -> service.save(INVALID_PASSAGEM_DTO)).isInstanceOf(ResourceNotValidException.class);
@@ -92,7 +88,7 @@ class PassagemServiceTest {
 	}
 
 	@Test
-	public void findPassagem_ByUnexistingId_ThrowsException() {
+	public void findPassagem_ByUnexistingId_ThrowsResourceNotFoundException() {
 		when(repository.findById(anyInt())).thenThrow(ResourceNotFoundException.class);
 
 		assertThatThrownBy(() -> service.findById(anyInt())).isInstanceOf(ResourceNotFoundException.class);

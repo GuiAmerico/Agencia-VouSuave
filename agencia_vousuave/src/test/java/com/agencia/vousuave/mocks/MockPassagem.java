@@ -31,26 +31,16 @@ public class MockPassagem {
 			.build();
 
 	public static final Passagem PASSAGEM_2 = Passagem.builder().id(2).origem("Origem").destino("Destino").preco(1000)
-			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.AVIAO)
+			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.ONIBUS)
 			.build();
 
 	public static final Passagem PASSAGEM_3 = Passagem.builder().id(3).origem("Origem").destino("Destino").preco(1000)
-			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.AVIAO)
+			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.CRUZEIRO)
 			.build();
 
-	public static final PassagemDTO PASSAGEM_DTO_1 = PassagemDTO.builder().origem("Origem").destino("Destino")
-			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
-			.tiposPassagem(TiposPassagem.AVIAO).build();
-
-	public static final PassagemDTO PASSAGEM_DTO_2 = PassagemDTO.builder().origem("Origem").destino("Destino")
-			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
-			.tiposPassagem(TiposPassagem.AVIAO).build();
-
-	public static final PassagemDTO PASSAGEM_DTO_3 = PassagemDTO.builder().origem("Origem").destino("Destino")
-			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
-			.tiposPassagem(TiposPassagem.AVIAO).build();
-
 	private static final List<Passagem> PASSAGENS = new ArrayList<>() {
+		private static final long serialVersionUID = 1L;
+
 		{
 			add(PASSAGEM_1);
 			add(PASSAGEM_2);
