@@ -4,10 +4,14 @@ import static com.agencia.vousuave.mocks.MockPassagem.INVALID_PASSAGEM;
 import static com.agencia.vousuave.mocks.MockPassagem.INVALID_PASSAGEM_DTO;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO;
+import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_1;
+import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_2;
+import static com.agencia.vousuave.mocks.MockPassagem.PASSAGEM_DTO_3;
 import static com.agencia.vousuave.mocks.MockPassagem.PASSAGENS_PAGES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -77,13 +81,13 @@ class PassagemServiceTest {
 
 		assertDoesNotThrow(() -> service.findById(anyInt()));
 		assertThat(sut).isEqualTo(PASSAGEM_DTO);
-		assertThat(sut.getDestino()).isEqualTo(PASSAGEM.getDestino());
-		assertThat(sut.getOrigem()).isEqualTo(PASSAGEM.getOrigem());
-		assertThat(sut.getPreco()).isEqualTo(PASSAGEM.getPreco());
-		assertThat(sut.getDesconto()).isEqualTo(PASSAGEM.getDesconto());
-		assertThat(sut.getDisponibilidade()).isEqualTo(PASSAGEM.getDisponibilidade());
-		assertThat(sut.getCaminhoImagem()).isEqualTo(PASSAGEM.getCaminhoImagem());
-		assertThat(sut.getTiposPassagem()).isEqualTo(PASSAGEM.getTiposPassagem());
+		assertThat(sut.getDestino()).isEqualTo(PASSAGEM_DTO.getDestino());
+		assertThat(sut.getOrigem()).isEqualTo(PASSAGEM_DTO.getOrigem());
+		assertThat(sut.getPreco()).isEqualTo(PASSAGEM_DTO.getPreco());
+		assertThat(sut.getDesconto()).isEqualTo(PASSAGEM_DTO.getDesconto());
+		assertThat(sut.getDisponibilidade()).isEqualTo(PASSAGEM_DTO.getDisponibilidade());
+		assertThat(sut.getCaminhoImagem()).isEqualTo(PASSAGEM_DTO.getCaminhoImagem());
+		assertThat(sut.getTiposPassagem()).isEqualTo(PASSAGEM_DTO.getTiposPassagem());
 
 	}
 
@@ -110,6 +114,5 @@ class PassagemServiceTest {
 		PagedModel<EntityModel<PassagemDTO>> sut = service.findAll(pageable);
 
 		assertThat(sut).hasSize(3);
-
 	}
 }

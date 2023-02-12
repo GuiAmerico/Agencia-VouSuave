@@ -26,17 +26,29 @@ public class MockPassagem {
 	public static final PassagemDTO INVALID_PASSAGEM_DTO = PassagemDTO.builder().origem("").destino("").preco(0)
 			.desconto(0).caminhoImagem("").disponibilidade("").tiposPassagem(null).build();
 
-	public static final Passagem PASSAGEM_1 = Passagem.builder().origem("Origem").destino("Destino").preco(1000)
+	public static final Passagem PASSAGEM_1 = Passagem.builder().id(1).origem("Origem").destino("Destino").preco(1000)
 			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.AVIAO)
 			.build();
 
-	public static final Passagem PASSAGEM_2 = Passagem.builder().origem("Origem").destino("Destino").preco(1000)
+	public static final Passagem PASSAGEM_2 = Passagem.builder().id(2).origem("Origem").destino("Destino").preco(1000)
 			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.AVIAO)
 			.build();
 
-	public static final Passagem PASSAGEM_3 = Passagem.builder().origem("Origem").destino("Destino").preco(1000)
+	public static final Passagem PASSAGEM_3 = Passagem.builder().id(3).origem("Origem").destino("Destino").preco(1000)
 			.desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null).tiposPassagem(TiposPassagem.AVIAO)
 			.build();
+
+	public static final PassagemDTO PASSAGEM_DTO_1 = PassagemDTO.builder().origem("Origem").destino("Destino")
+			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
+			.tiposPassagem(TiposPassagem.AVIAO).build();
+
+	public static final PassagemDTO PASSAGEM_DTO_2 = PassagemDTO.builder().origem("Origem").destino("Destino")
+			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
+			.tiposPassagem(TiposPassagem.AVIAO).build();
+
+	public static final PassagemDTO PASSAGEM_DTO_3 = PassagemDTO.builder().origem("Origem").destino("Destino")
+			.preco(1000).desconto(0.05).caminhoImagem("CaminhoImagem").disponibilidade(null)
+			.tiposPassagem(TiposPassagem.AVIAO).build();
 
 	private static final List<Passagem> PASSAGENS = new ArrayList<>() {
 		{
@@ -48,5 +60,6 @@ public class MockPassagem {
 
 	public static final Page<Passagem> PASSAGENS_PAGES = new PageImpl<>(PASSAGENS);
 
+	public static final Page<PassagemDTO> PASSAGENS_DTO = PASSAGENS_PAGES.map(passagem -> new PassagemDTO(passagem));
 
 }

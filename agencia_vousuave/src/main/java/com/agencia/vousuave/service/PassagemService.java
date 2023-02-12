@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PassagemService {
 
-	private final HateoasPageableHandlerMethodArgumentResolver resolver = new HateoasPageableHandlerMethodArgumentResolver();
+	private HateoasPageableHandlerMethodArgumentResolver resolver = new HateoasPageableHandlerMethodArgumentResolver();
 	private final PassagemRepository repository;
-	private final PagedResourcesAssembler<PassagemDTO> assembler = new PagedResourcesAssembler<>(resolver, null);
+	private PagedResourcesAssembler<PassagemDTO> assembler = new PagedResourcesAssembler<>(resolver, null);
 
 	public PassagemDTO save(PassagemDTO passagemDTO) {
 
@@ -56,7 +56,6 @@ public class PassagemService {
 		Page<Passagem> passagens = repository.findAll(pageable);
 		Page<PassagemDTO> passagensDTO = passagens.map(passagem -> new PassagemDTO(passagem));
 		Link link = (linkTo(methodOn(PassagemController.class).findAll(pageable)).withSelfRel());
-
 		return assembler.toModel(passagensDTO, link);
 	}
 
