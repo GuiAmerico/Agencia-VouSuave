@@ -14,48 +14,40 @@ import javax.validation.constraints.NotNull;
 
 import com.agencia.vousuave.enums.TiposPassagem;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 public class Passagem {
-
-	public Passagem() {
-
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty(message = "Campo Origem é obrigatório")
 	@Column(length = 110, nullable = false)
 	private String origem;
 
-	@NotEmpty(message = "Campo Destino é obrigatório")
 	@Column(length = 110, nullable = false)
 	private String destino;
 
-	@NotNull(message = "Campo Preço é obrigatório")
 	@Column(nullable = false)
 	private double preco;
 
-	@NotNull(message = "Campo Desconto é obrigatório")
 	@Column(nullable = false)
 	@Min(0)
 	@Max(1)
 	private double desconto;
 
-	@NotEmpty(message = "Campo Caminho da Imagem é obrigatório")
 	@Column(name = "caminho")
 	private String caminhoImagem;
 
 	@Column(name = "Tipo_Passagem", nullable = false)
-	@NotNull(message = "Campo Tipo de Passagem é obrigatório")
 	@Enumerated(EnumType.STRING)
 	private TiposPassagem tiposPassagem;
 

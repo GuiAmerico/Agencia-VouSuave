@@ -3,18 +3,19 @@ package com.agencia.vousuave.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException{
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+public class ResourceNotValidException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ResourceNotFoundException(String message) {
+	public ResourceNotValidException(String message) {
 		super(message);
 	}
 
-	
-	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.agencia.vousuave.exception.ExceptionResponse;
 import com.agencia.vousuave.exception.ResourceAlreadyExistsException;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
+import com.agencia.vousuave.exception.ResourceNotValidException;
 
 @ControllerAdvice
 @RestController
@@ -34,6 +35,12 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
 	public final ResponseEntity<ExceptionResponse> handleAlreadyExistsException(Exception ex, WebRequest req){
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(ResourceNotValidException.class)
+	public final ResponseEntity<ExceptionResponse> handleNotValidException(Exception ex, WebRequest req){
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 }

@@ -43,10 +43,15 @@ public class ComprasClienteService {
 		compras.setCliente_id(cliente.getId());
 
 		ComprasCliente comprasCliente = new ComprasCliente();
-		Pacote pacote = pacoteRepository.findById(compras.getPacote().getId()).orElse(null);
-		comprasCliente.setPacote(pacote);
-		Passagem passagem = passagemRepository.findById(compras.getPassagem().getId()).orElse(null);
-		comprasCliente.setPassagem(passagem);
+		if (compras.getPacote() != null) {
+
+			Pacote pacote = pacoteRepository.findById(compras.getPacote().getId()).orElse(null);
+			comprasCliente.setPacote(pacote);
+		}
+		if (compras.getPassagem() != null) {
+			Passagem passagem = passagemRepository.findById(compras.getPassagem().getId()).orElse(null);
+			comprasCliente.setPassagem(passagem);
+		}
 		comprasCliente.setCliente(cliente);
 		comprasCliente.setDataCompra(LocalDateTime.now());
 		repository.save(comprasCliente);
@@ -61,21 +66,27 @@ public class ComprasClienteService {
 				.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
 
 		List<ComprasClienteDTO> compras = new ArrayList<>();
-		for (ComprasCliente comprasCliente : cliente.getCompras()) {
-			ComprasClienteDTO compra = new ComprasClienteDTO();
-			compra.setId(comprasCliente.getId());
-			PassagemDTO passagemDTO = new PassagemDTO();
-			BeanUtils.copyProperties(comprasCliente.getPassagem(), passagemDTO);
-			compra.setPassagem(passagemDTO);
-			PacoteDTO pacoteDTO = new PacoteDTO();
-			BeanUtils.copyProperties(comprasCliente.getPacote(), pacoteDTO);
-			compra.setPacote(pacoteDTO);
-			compra.setCliente_id(comprasCliente.getCliente().getId());
+		if (cliente.getCompras() != null) {
 
-			compras.add(compra);
-			compra.add(linkTo(methodOn(ComprasClienteController.class).findAll(usuario_id)).withSelfRel());
-			compra.getPassagem().add(linkTo(methodOn(PassagemController.class).findById(compra.getPassagem().getId())).withSelfRel());
-			compra.getPacote().add(linkTo(methodOn(PacoteController.class).findById(compra.getPacote().getId())).withSelfRel());
+			for (ComprasCliente comprasCliente : cliente.getCompras()) {
+				ComprasClienteDTO compra = new ComprasClienteDTO();
+				compra.setId(comprasCliente.getId());
+				PassagemDTO passagemDTO = new PassagemDTO();
+				BeanUtils.copyProperties(comprasCliente.getPassagem(), passagemDTO);
+				compra.setPassagem(passagemDTO);
+				PacoteDTO pacoteDTO = new PacoteDTO();
+				BeanUtils.copyProperties(comprasCliente.getPacote(), pacoteDTO);
+				compra.setPacote(pacoteDTO);
+				compra.setCliente_id(comprasCliente.getCliente().getId());
+
+				compras.add(compra);
+				compra.add(linkTo(methodOn(ComprasClienteController.class).findAll(usuario_id)).withSelfRel());
+				compra.getPassagem()
+						.add(linkTo(methodOn(PassagemController.class).findById(compra.getPassagem().getId()))
+								.withSelfRel());
+				compra.getPacote().add(
+						linkTo(methodOn(PacoteController.class).findById(compra.getPacote().getId())).withSelfRel());
+			}
 		}
 		return compras;
 	}

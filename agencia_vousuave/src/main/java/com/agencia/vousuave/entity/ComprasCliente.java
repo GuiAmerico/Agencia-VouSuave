@@ -15,13 +15,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Builder
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "Compras_Cliente")
 public class ComprasCliente {
