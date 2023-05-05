@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.agencia.vousuave.controller.PacoteController;
 import com.agencia.vousuave.dto.PacoteDTO;
+import com.agencia.vousuave.dto.PassagemDTO;
 import com.agencia.vousuave.entity.Pacote;
 import com.agencia.vousuave.exception.ResourceNotFoundException;
 import com.agencia.vousuave.repository.PacoteRepository;
@@ -25,9 +27,9 @@ import lombok.RequiredArgsConstructor;
 public class PacoteService {
 
 	private final PacoteRepository repository;
-
-	private final PagedResourcesAssembler<PacoteDTO> assembler;
-
+	private HateoasPageableHandlerMethodArgumentResolver resolver = new HateoasPageableHandlerMethodArgumentResolver();
+	private PagedResourcesAssembler<PacoteDTO> assembler = new PagedResourcesAssembler<>(resolver, null);
+	
 	public PacoteDTO save(PacoteDTO pacoteDTO) {
 		Pacote pacote = new Pacote();
 		BeanUtils.copyProperties(pacoteDTO, pacote);

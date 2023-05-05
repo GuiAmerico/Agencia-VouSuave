@@ -47,7 +47,7 @@ public class PacoteController {
 					@ApiResponse(responseCode = "404", content = @Content, description = "Not Found"),
 					@ApiResponse(responseCode = "500", content = @Content, description = "Internal Error") })
 	@GetMapping
-	public ResponseEntity<PagedModel<EntityModel<PacoteDTO>>> findAll(@PageableDefault(size = 6, page = 0) Pageable pageable) {
+	public ResponseEntity<PagedModel<EntityModel<PacoteDTO>>> findAll(@PageableDefault(size = 3, page = 0) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageable));
 
 	}
