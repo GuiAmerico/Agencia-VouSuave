@@ -39,7 +39,8 @@ public class PassagemController {
 	private final PassagemService service;
 
 	@Operation(summary = "Finds all Passagens", description = "Finds all Passagens, with pagination,the size is 3", tags = {
-			"Passagem" }, responses = { @ApiResponse(responseCode = "200", content = {
+			"Passagem" }, responses = {
+					@ApiResponse(responseCode = "200", content = {
 					@Content(array = @ArraySchema(schema = @Schema(implementation = PassagemDTO.class))) }, description = "Success"),
 					@ApiResponse(responseCode = "400", content = @Content, description = "Bad Request"),
 					@ApiResponse(responseCode = "401", content = @Content, description = "Unauthorized"),
